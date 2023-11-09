@@ -1,8 +1,17 @@
 const express = require("express");
-const { connectDB } = require("./db/connection");
 require("dotenv").config();
+const cors = require("cors");
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors({ origin: "http://localhost:5173" }));
+
+const { connectDB } = require("./db/connection");
+
+const authRoutes = require("./routes/auth");
+
+app.use("/api/auth", authRoutes);
 
 const start = async () => {
   try {
