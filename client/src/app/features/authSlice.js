@@ -23,7 +23,7 @@ const authSlice = createSlice({
       state.success = false;
     },
     signInSuccess: (state, action) => {
-      state.user = action.payload;
+      state.user = JSON.parse(localStorage.getItem("user"));
       state.error = null;
       state.success = true;
     },

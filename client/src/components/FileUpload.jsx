@@ -1,6 +1,14 @@
-import { Box } from "@mui/material";
-import { MdPictureAsPdf } from "react-icons/md";
+import { Box, Stack, Typography } from "@mui/material";
+import {
+  MdPictureAsPdf,
+  MdOutlineDriveFolderUpload,
+  MdDelete,
+} from "react-icons/md";
+import { useUpload } from "../hooks/useUpload";
+import convertFileSizeToKB from "../functions/convertSize";
+
 function FileUpload() {
+  const { pdf, handleChange, handleClear, handleSubmit } = useUpload();
   return (
     <Box sx={{ marginTop: "7rem" }}>
       <div
@@ -37,8 +45,37 @@ function FileUpload() {
           id="fileInput"
           accept=".pdf"
           style={{ display: "none" }}
+          onChange={(e) => handleChange(e)}
         />
       </div>
+      {pdf && (
+        <Box
+          sx={{
+            width: "75%",
+            margin: "1rem auto",
+            backgroundColor: "#fff",
+            padding: "1rem 1rem",
+            borderRadius: ".3rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}>
+          <Typography sx={{ fontSize: "1.2rem" }}>{pdf?.name}</Typography>
+          <Typography sx={{ fontSize: "1.2rem" }}>{`${convertFileSizeToKB(
+            pdf?.size
+          )} kb`}</Typography>
+          <Stack direction="row" gap={1} sx={{ cursor: "pointer" }}>
+            <MdOutlineDriveFolderUpload
+              color="green"
+              size="1.5rem"
+              onClick={() => handleSubmit()}></MdOutlineDriveFolderUpload>
+            <MdDelete
+              color="red"
+              size="1.5rem"
+              onClick={() => handleClear()}></MdDelete>
+          </Stack>
+        </Box>
+      )}
     </Box>
   );
 }

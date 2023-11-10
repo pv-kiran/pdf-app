@@ -77,13 +77,12 @@ const userSignin = async (req, res) => {
       // password is correct
       if (isCorrectPassword) {
         // token configuration - access token
-        const token = getAccessToken(userExist._id);
+        const accessToken = getAccessToken(userExist._id);
 
         // token configuration - refresh token
         const refreshToken = getRefreshToken(userExist._id);
         refreshTokens.push(refreshToken);
 
-        userExist.token = token;
         userExist.password = undefined;
 
         // for cookie configuration
@@ -92,10 +91,11 @@ const userSignin = async (req, res) => {
           httpOnly: true,
         };
 
-        return res.status(200).cookie("token", token, options).json({
+        return res.status(200).cookie("token", accessToken, options).json({
           success: true,
           user: userExist,
-          refreshToken: refreshToken,
+          accessToken,
+          refreshToken,
         });
       }
       // incorrect password
@@ -109,6 +109,7 @@ const userSignin = async (req, res) => {
       message: `Email doesn't exist`,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       message: "Internal Server Error",
     });
@@ -117,6 +118,7 @@ const userSignin = async (req, res) => {
 
 const refreshToken = (req, res) => {
   const { refreshToken } = req.body;
+  console.log(refreshToken);
   if (refreshToken == null)
     return res.status(403).json({ error: "Invalid refresh token" });
   if (!refreshTokens.includes(refreshToken))
@@ -125,15 +127,14 @@ const refreshToken = (req, res) => {
   try {
     const decoded = verifyRefreshToken(refreshToken);
     const accessToken = getAccessToken(decoded.userId);
-    res.json({ accessToken });
+    res.status(200).json({ accessToken });
   } catch (err) {
-    console.log("HEllo");
     return res.status(403).json({ error: "Invalid refresh token" });
   }
 };
 
 const userSignout = (req, res) => {
-  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
+  // refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
   res
     .status(200)
     .cookie("token", null, {
