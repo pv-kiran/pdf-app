@@ -11,6 +11,15 @@ import PublicRoutes from "./utils/PublicRoutes";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import PdfUpload from "./pages/PdfUpload";
 
+import { pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
+
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
+
 function App() {
   return (
     <>

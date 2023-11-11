@@ -8,7 +8,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin: "http://localhost:5173" }));
 
 const fileupload = require("express-fileupload");
-app.use(fileupload({ useTempFiles: true, tempFileDir: "/temp/" }));
+// app.use(fileupload({ useTempFiles: true, tempFileDir: "/temp/" }));
+app.use(fileupload());
 
 const { connectDB } = require("./db/connection");
 
