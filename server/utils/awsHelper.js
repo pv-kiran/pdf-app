@@ -5,11 +5,7 @@ AWS.config.update({
   secretAccessKey: process.env.AWS_SECRET_KEY,
 });
 
-const getBucketParams = (
-  pdf = undefined,
-  pdfBytes = undefined,
-  pdfName = undefined
-) => {
+const getBucketParams = (pdf, pdfBytes, pdfName) => {
   const params = {
     Bucket: process.env.S3_BUCKET_NAME,
     Body: pdfBytes ?? pdf?.data,

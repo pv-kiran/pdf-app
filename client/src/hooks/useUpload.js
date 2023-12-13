@@ -1,18 +1,26 @@
 import { useState } from "react";
-import { useUploadAPI } from "./useUploadAPI";
+
+import { uploadPdf } from "../app/features/fileSlice";
+import { useDispatch } from "react-redux";
 
 export const useUpload = () => {
   const [pdf, setPdf] = useState("");
-  const pdfUpload = useUploadAPI();
+
+  const dipatch = useDispatch();
 
   const handleChange = (e) => {
     setPdf(e.target.files[0]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("pdf", pdf);
-    pdfUpload(formData);
+    try {
+      dipatch(uploadPdf(formData));
+      handleClear();
+    } catch (err) {
+      // showToast("File upload failed", "error");
+    }
   };
   const handleClear = () => {
     setPdf("");

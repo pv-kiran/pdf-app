@@ -19,6 +19,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
+import PdfView from "./pages/PdfView";
+import PdfExtract from "./pages/PdfExtract";
+import MyFiles from "./pages/MyFiles";
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
         </Route>
         <Route element={<ProtectedRoutes />}>
           <Route path="/upload" element={<PdfUpload />}></Route>
+          <Route path="/:id/view" element={<PdfView />}></Route>
+          <Route path="/:id/extract" element={<PdfExtract />}></Route>
+          <Route path="/myfiles" element={<MyFiles />}></Route>
         </Route>
       </Routes>
       <ToastContainer />

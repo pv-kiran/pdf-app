@@ -10,41 +10,19 @@ import { Link } from "react-router-dom";
 
 import { getFormData } from "../../functions/formData";
 
-import { useValidate } from "../../hooks/useValidate";
-import { useAuth } from "../../hooks/useAuth";
 import { useForm } from "../../hooks/useForm";
 
 import SubmitButton from "../styled/SubmitButton";
 
-import { showToast } from "../../functions/toastNotification";
-
 function Form({ formType }) {
   const formData = getFormData(formType);
 
-  const { values: user, handleChange, resetForm } = useForm(formData);
-  const { errors, validate, clearError } = useValidate();
-
-  const { signin, signup } = useAuth();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const valid = validate(user, formType);
-
-    if (valid) {
-      try {
-        formType === "signup" ? await signup(user) : await signin(user);
-        resetForm();
-        showToast(`${formType?.toUpperCase()} SUCESS`, "success");
-      } catch (err) {
-        showToast(err?.data?.message, "error");
-      }
-    }
-  };
-
-  const inputChange = (e) => {
-    handleChange(e);
-    clearError(e.target.name);
-  };
+  const {
+    values: user,
+    handleChange,
+    handleSubmit,
+    errors,
+  } = useForm(formData);
 
   return (
     <>
@@ -59,7 +37,7 @@ function Form({ formType }) {
           component="form"
           autoComplete="off"
           onSubmit={(e) => {
-            handleSubmit(e);
+            handleSubmit(e, formType, user);
           }}
           sx={{
             display: "flex",
@@ -81,7 +59,7 @@ function Form({ formType }) {
               }}
               name="name"
               value={user.name}
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => handleChange(e)}
               error={Boolean(errors.name)}
               helperText={errors.name}
             />
@@ -95,7 +73,7 @@ function Form({ formType }) {
             }}
             name="email"
             value={user.email}
-            onChange={(e) => inputChange(e)}
+            onChange={(e) => handleChange(e)}
             error={Boolean(errors.email)}
             helperText={errors.email}
           />
@@ -110,7 +88,7 @@ function Form({ formType }) {
               name="mobile"
               value={user.mobile}
               type="text"
-              onChange={(e) => inputChange(e)}
+              onChange={(e) => handleChange(e)}
               error={Boolean(errors.mobile)}
               helperText={errors.mobile}
             />
@@ -125,7 +103,7 @@ function Form({ formType }) {
             name="password"
             value={user.password}
             type="password"
-            onChange={(e) => inputChange(e)}
+            onChange={(e) => handleChange(e)}
             error={Boolean(errors.password)}
             helperText={errors.password}
           />

@@ -1,4 +1,4 @@
-const uploadPdf = (req, res, next) => {
+const uploadFile = (req, res, next) => {
   if (!req.files || !req.files.pdf) {
     return res.status(400).json({
       success: false,
@@ -19,4 +19,4 @@ const uploadPdf = (req, res, next) => {
   next();
 };
 
-module.exports = uploadPdf;
+module.exports = uploadFile;
